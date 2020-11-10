@@ -3,12 +3,14 @@ const {app, BrowserWindow,  dialog } = require('electron')
 const { autoUpdater } = require("electron-updater");
 const path = require('path')
 
-const server = 'https://electron-quick-start-master-prhjj28sm.vercel.app'
+const server = 'https://electron-update-koyb5oexy.vercel.app'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+autoUpdater.on('update-available', (ev, info) => {
+ alert('update available')
+})
+autoUpdater.addListener('update-downloaded', (event, releaseNotes, releaseName) => {
   const dialogOpts = {
       type: 'info',
       buttons: ['Neustarten', 'Jetzt nicht. Später'],
@@ -62,8 +64,8 @@ app.on('window-all-closed', function () {
 
 app.on("ready", function() {
   setInterval(() => {
-  autoUpdater.checkForUpdatesAndNotify();
-}, 10000)
+  autoUpdater.checkForUpdates();
+}, 1000)
  });
 
 // In this file you can include the rest of your app's specific main process
