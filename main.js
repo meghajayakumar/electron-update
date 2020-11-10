@@ -1,6 +1,11 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, autoUpdater} = require('electron')
 const path = require('path')
+
+const server = 'https://electron-quick-start-master-prhjj28sm.vercel.app'
+const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+
+autoUpdater.setFeedURL(feed)
 
 function createWindow () {
   // Create the browser window.
