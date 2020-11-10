@@ -1,11 +1,27 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, autoUpdater} = require('electron')
+const {app, BrowserWindow,  dialog } = require('electron')
+const { autoUpdater } = require("electron-updater");
 const path = require('path')
 
 const server = 'https://electron-quick-start-master-prhjj28sm.vercel.app'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+      type: 'info',
+      buttons: ['Neustarten', 'Jetzt nicht. Später'],
+      title: 'Masslinker Update',
+      message: process.platform === 'win32' ? releaseNotes : releaseName,
+      detail: 'Eine Neue Version wurde heruntergeladen. Starte die Anwendung neu um das Update zu installieren.'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
+
 
 function createWindow () {
   // Create the browser window.
@@ -43,6 +59,12 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+app.on("ready", function() {
+  setInterval(() => {
+  autoUpdater.checkForUpdatesAndNotify();
+}, 10000)
+ });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
