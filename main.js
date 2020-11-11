@@ -7,6 +7,7 @@ const server = 'https://electron-update-koyb5oexy.vercel.app'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
+
 autoUpdater.on('update-available', (ev, info) => {
  alert('update available')
 })
